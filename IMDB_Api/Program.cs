@@ -19,8 +19,8 @@ builder.Services.AddSwaggerGen(
             Description = "Api fournissant des infos ciné",
             Contact = new OpenApiContact
             {
-                Name = "Steve Lorent",
-                Email = "steve.lorent@bstorm.be"
+                Name = "Allan Colinet",
+                Email = "allan.colinet@gmail.com"
             },
             Version = "v1"
         });

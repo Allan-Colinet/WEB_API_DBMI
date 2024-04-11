@@ -14,41 +14,48 @@ namespace IMDB_Api.Controllers
     public class MovieController : ControllerBase
     {
         private readonly IMovieRepo _movieRepo;
+        private readonly IPersonRepo _personRepo;
 
-        public MovieController(IMovieRepo movieRepo)
+        public MovieController(IMovieRepo movieRepo, IPersonRepo personRepo)
         {
             _movieRepo = movieRepo;
+            _personRepo = personRepo;
         }
 
+        /// <summary>
+        /// return a list of all movies
+        /// </summary>
+        /// <returns>List Movie</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-
         public IActionResult GetAll()
         {
             //object truc = new { Nom = "steve", Age = 22, AgeMental = 12 };/
 
             return Ok(_movieRepo.GetAll()) ;
         }
+
         /// <summary>
-        /// Faut pas respirer la compote, ça fait tousser
+        /// return a Movie by Id
         /// </summary>
         /// <param name="id"></param>
-        /// <returns>Un objet de type Movie</returns>
-        /// <remarks>Cette méthode prend un Id de film en paramètre et 
-        /// retourne un Ok contenant l'objet</remarks>
+        /// <returns>Movie object</returns>
+        /// <remarks> take Id Movie in parameters and return Ok with object Movie</remarks>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-
         public IActionResult GetById(int id)
         {
             return Ok(_movieRepo.GetById(id));
         }
 
-        
+        /// <summary>
+        /// This action to create a new movie
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns>return new Movie object</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(MovieCreateForm), StatusCodes.Status400BadRequest)]
-        
         public IActionResult Create(MovieCreateForm form)
         {
             if (!ModelState.IsValid) return BadRequest();
@@ -56,6 +63,11 @@ namespace IMDB_Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// This action delete one film by his id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Return Ok good request200</returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult Delete(int id)
@@ -64,10 +76,15 @@ namespace IMDB_Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// here is the method to update one film
+        /// </summary>
+        /// <param name="m"></param>
+        /// <param name="id"></param>
+        /// <returns>return object Movie edit </returns>
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(MovieCreateForm), StatusCodes.Status400BadRequest)]
-
         public IActionResult Update([FromBody]MovieCreateForm m, [FromRoute]int id)
         {
             if(!ModelState.IsValid) return BadRequest();
@@ -77,6 +94,18 @@ namespace IMDB_Api.Controllers
 
             return Ok();
 
+        }
+
+        /// <summary>
+        /// this method is to get a movie by person Id
+        /// </summary>
+        /// <param name="personId"></param>
+        /// <returns>return a movie</returns>
+        [HttpGet("ByActorId/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult GetMovieByPersonId(int personId)
+        {
+            return Ok(_movieRepo.GetMovieByPersonId(personId));
         }
 
     }
